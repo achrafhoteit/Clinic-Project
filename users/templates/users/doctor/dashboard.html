@@ -1,0 +1,35 @@
+{% extends 'users/doctor/base.html' %}
+{% load static %}
+{% block content %}
+  {% include 'users/doctor/dashboard_cards.html' %}
+  <br><br><br><br>
+  <div class="container">
+    <div class="row">
+      <div class="panel panel-primary" style="margin-left:2%;">
+        <div class="panel-heading" style="text-align:center;">
+          <h6 class="panel-title">Uncompleted Appointments For You</h6>
+        </div>
+        <table class="table table-hover table-striped" id="dev-table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Patient Name</th>
+              <th>Description</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Fees Per Hour</th>
+            </tr>
+          </thead>
+          {% for app in appointments %}
+            <tr>
+              <td>{{ app.patient.get_name }}</td>
+              <td>{{ app.description }}</td>
+              <td>{{ app.start_time }}</td>
+              <td>{{ app.end_time }}</td>
+              <td>{{ app.fees_per_hour }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

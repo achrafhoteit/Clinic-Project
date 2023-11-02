@@ -1,0 +1,118 @@
+{% extends 'users/admin/base.html' %}
+{% block content %}
+
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+
+    .center-button {
+      text-align: center;
+    }
+
+    .download {
+      text-align: center;
+      display: block;
+    }
+
+  </style>
+</head>
+
+<form method="post">
+  {% csrf_token %}
+    {{ form.as_p }}
+    <div class="center-button">
+      <button type="submit">Filter</button>
+    </div>
+</form>
+<br><br>
+
+
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Uncompleted Appointments</h6>
+    </div>
+    <table class="table table-hover" id="dev-table">
+      <thead>
+        <tr>
+          <th>Doctor Name</th>
+          <th>Patient Name</th>
+          <th>Description</th>
+          <th>Starts</th>
+          <th>Ends</th>
+          <th>Update</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      {% for a in appointments %}
+        {% if a.is_completed is False %}
+          <tr>
+            <td> {{a.doctor.user.first_name}}</td>
+            <td>{{a.patient.user.first_name}}</td>
+            <td>{{a.description}}</td>
+            <td>{{a.start_time}}</td>
+            <td>{{a.end_time}}</td>
+            <td><a class="btn btn-primary btn-xs" href="{% url 'update-appointment' a.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
+            <td><a class="btn btn-danger btn-xs" href="{% url 'delete-appointment-from-hospital' a.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </table>
+  </div>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Completed Appointments</h6>
+    </div>
+    <table class="table table-hover" id="dev-table">
+      <thead>
+        <tr>
+          <th>Doctor Name</th>
+          <th>Patient Name</th>
+          <th>Description</th>
+          <th>Started</th>
+          <th>Ended</th>
+          <th>Update</th>
+          <th>Delete</th>
+          <th>Download Bill</th>
+        </tr>
+      </thead>
+      {% for a in appointments %}
+        {% if a.is_completed %}
+          <tr>
+            <td> {{a.doctor.user.first_name}}</td>
+            <td>{{a.patient.user.first_name}}</td>
+            <td>{{a.description}}</td>
+            <td>{{a.start_time}}</td>
+            <td>{{a.end_time}}</td>
+            <td><a class="btn btn-primary btn-xs" href="{% url 'update-appointment' a.id  %}"><span class="glyphicon glyphicon-edit"></span></a></td>
+            <td><a class="btn btn-danger btn-xs" href="{% url 'delete-appointment-from-hospital' a.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
+            <td><a class="btn btn-info btn-xs" href="{% url 'appointment-bill' a.id  %}"><span class="glyphicon glyphicon-download-alt"></span></a></td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </table>
+  </div>
+
+</div>
+<br><br>
+<div class="download">
+  <a style="background:red; width:500px;" href="{% url 'appointments-csv' %}">Download as CSV</a>
+</div>
+
+{% endblock content %}
